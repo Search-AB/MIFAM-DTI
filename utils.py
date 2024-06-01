@@ -4,7 +4,7 @@ from sklearn.decomposition import PCA
 from sklearn.preprocessing import scale
 
 
-def multiomics_data():
+def load_data():
 
     # protein_fea
     DC = np.genfromtxt("data-celegans/02protein_DC.csv", delimiter=',', skip_header=1, dtype=np.dtype(str))
