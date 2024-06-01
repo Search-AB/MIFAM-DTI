@@ -90,7 +90,6 @@ class selfattention(nn.Module):
         self.value = nn.Linear(sample_size, d_v)
 
     def forward(self, x):
-        x =x.T
         q = self.query(x)
         k = self.key(x)
         v = self.value(x)
@@ -98,7 +97,7 @@ class selfattention(nn.Module):
         att = torch.matmul(q, k.transpose(0, 1)) / np.sqrt(self.d_k)
         att = torch.softmax(att, dim=1)
         output = torch.matmul(att, v)
-        return output.T
+        return output
 
 #GCN代码
 class GraphConvolutionLayer(nn.Module):
