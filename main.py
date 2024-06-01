@@ -17,8 +17,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 from sklearn.metrics import roc_auc_score, average_precision_score
 
-from utils import multiomics_data
-from model import MultiDeep
+from utils import load_data
+from model import MIFAM-DTI
 import torch.utils.data as Dataset
 
 from datetime import datetime
@@ -51,7 +51,7 @@ else:
     device = torch.device("cpu")
 
 # Load data
-protein_features, protein_adj, drug_features, drug_adj, sample_set = multiomics_data()
+protein_features, protein_adj, drug_features, drug_adj, sample_set = load_data()
 protein_features, protein_adj = Variable(protein_features), Variable(protein_adj)
 drug_features, drug_adj = Variable(drug_features), Variable(drug_adj)
 protein_features, protein_adj = protein_features.to(device), protein_adj.to(device)
@@ -62,7 +62,7 @@ cached_memory = torch.cuda.memory_reserved()   #缓存的GPU内存量
 print(f"数据上传成功，服务器GPU已分配：{used_memory / 1024**3:.2f} GB，已缓存：{cached_memory / 1024**3:.2f} GB")
 
 # Model and optimizer
-model = MultiDeep(nprotein=protein_features.shape[0],
+model = MIFAM-DTI(nprotein=protein_features.shape[0],
                   ndrug=drug_features.shape[0],
                   nproteinfeat=protein_features.shape[1],
                   ndrugfeat=drug_features.shape[1],
@@ -204,7 +204,7 @@ def compute_test(index_test, y_test):
     AUC_test = roc_auc_score(true_test,pred_test)
     AUPR_test = average_precision_score(true_test,pred_test)
 
-    with open("MultiDPI", 'a') as f:
+    with open("MIFAM-DTI", 'a') as f:
         f.write(str(model_date) + " " + str(RMSE_test) + " " + str(MAE_test) + " " + str(PCC_test) + " " + str(R2_test) + " " + str(AUC_test) + " " + str(AUPR_test) + "\n")
 
     print("Test set results:",
